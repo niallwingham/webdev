@@ -1,0 +1,161 @@
+﻿@{ Bundles.Reference("Scripts"); }
+<article>
+	<h1>Content & Presentation</h1>
+	<p>One of the fundamental principles of software development is the separation of content and presentation.  In web development, content is defined by markup (HTML) and presentation is defined by stylesheets (CSS).</p>
+	<p>This section examines the semantics and rules for defining content through HTML elements; how these elements and laid out by rendering engines; and how further styles can then be applied to the elements.</p>
+	<p>HTML and CSS are very forgiving and unstructured languages: a great part of the specifications deal with how to present malformed documents.  It is important to not take advantage of this leniency.  Therefore, the best practices in this section relate mainly to disciplined use of the languages and strategies for maintaining a true separation of content and presentation.</p>
+	<h2>Document Structure</h2>
+	<p>In HTML, all content is defined within a document, which may be static or dynamically updated.  A document is composed of a tree of HTML elements, so we talk about parent & child elements, ancestors & descendants, and siblings.  Siblings are ordered, so two siblings may be adjascent to each other, and each parent has a first and last child.</p>
+	<p>There are both syntactic and semantic rules that define how this tree of elements may be composed.  These rules may seem arcane at times, but they are often highly relevant for non-visual user agents such as screen readers and web crawlers.</p>
+	<h3>The Content Model</h3>
+	<p>The syntax of element trees is defined by the HTML content model.  We easily recognize that there are certain rules for where elements can be placed: a table cell must belong to a table row, which in turn belongs to a table.  It wouldn't make sense to put a table cell in an image element!</p>
+	<p>But what about less intuitive rules&mdash;can you put a list (<code>&lt;ul&gt;</code>) inside a paragraph?  This is what the content model defines.  There are seven major categories of content which elements may belong to, and each element also defines the categories of content which it may contain.</p>
+	<dl>
+		<dt>Flow Content</dt>
+		<dd>Any element that participates in the page layout.</dd>
+		<dt>Phrasing Content</dt>
+		<dd>The text of the document, and elements that mark up text within a paragraph (like <code>&lt;em&gt;</code> or <code>&lt;q&gt;</code>).</dd>
+		<dt>Sectioning Content</dt>
+		<dd>Elements that explicitly create sections and may contain header and footer elements.</dd>
+		<dt>Heading Content</dt>
+		<dd>Elements that implicitly create sections by defining a section header (<code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> and <code>&lt;hgroup&gt;</code>).</dd>
+		<dt>Interactive Content</dt>
+		<dd>Content meant for user interaction, like links and form fields.</dd>
+		<dt>Embedded Content</dt>
+		<dd>Anything that imports external content into the document (like <code>&lt;iframe&gt;</code> or <code>&lt;img&gt;</code>)</dd>
+		<dt>Metadata</dt>
+		<dd>Elements that convey additional information about the content, like its language or keywords.</dd>
+	</dl>
+	<p>Some categories of content are subsets of another, while others intersect.  For example, all phrasing content is flow content, and some interactive content is also embedded content.  There are also a few elements like <code>&lt;li&gt;</code> which do not belong to one of the major categories.</p>
+	<p>This formal content model allows us to answer questions like the one we asked above.  If we look at the specification, we will see that paragraphs may contain only phrasing content, and lists are flow content.  Therefore, you cannot put a list element inside a paragraph element.<a id="origin-list-inside-paragraph" class="note-link" href="#note-list-inside-paragraph">*</a></p>
+	<h3>Element Semantics</h3>
+	<p class="todo">Discuss the semantics of new elements (section, article, aside, etc.) and common pitfalls (using tables for visual layout, bold vs. strong, etc.).</p>
+	<h3>Parsing Documents</h3>
+	<p class="todo">Talk about how documents are parsed, performance concerns, placing of stylesheets & scripts, DNS hints, etc.</p>
+	<h2>Document Layout</h2>
+	<p>“Laying out” an element is how a rendering engine decides the size and position an element will occupy on the page.  It allocates the necessary space for the element, which in turn affects how subsequent elements are laid out.</p>
+	<p>Sometimes this allocated space is not where the element is finally rendered: elements can be further affected by CSS offset and tranformation properties without changing the layout of the document, as we will see later in this section.</p>
+	<h3>The Box Model</h3>
+	<p>The box model defines how the document's tree of elements is transformed into a tree of boxes.  Most elements generate exactly one box, but there are exceptions.  For example, elements with <code>display:&nbsp;none</code> do not generate any boxes, while elements with <code>display:&nbsp;list&#8209;item</code> generate one box for their content and a second for their bullet or number.</p>
+	<p>Every box contains four areas defined by their content, padding, border, and margins.  The latter three are set using the <code>padding</code>, <code>border</code>, and <code>margin</code> properties.  The <code>width</code> and <code>height</code> properties set the dimensions of the content area by default, but this can be changed using the <code>box&#8209;sizing</code> property.<a id="origin-box-sizing-uses" class="note-link" href="#note-box-sizing-uses">*</a></p>
+	<figure class="todo">Include an image demonstrating the four areas.</figure>
+	<p>It is important to distinguish “border width” from “border area width”.  A box may have a border width of 5px.  If the box's content is 100px wide and also has 20px of padding on either side, the border area width is then 150px.</p>
+	<p>Only margins may have negative widths or heights.  Negative margins are useful for overlapping elements or keeping text inline when a border or padding would otherwise shift an element out of line with its siblings.</p>
+	<figure class="todo">Include an image showing how a negative margin can be used to offset border and padding; maybe a highlighted navigation element.</figure>
+	<h3>Positioning Boxes</h3>
+	<p>After the boxes have been generated for each element, they must be laid out on the page.  Two things affect how a box is laid out: its box type and its positioning scheme.</p>
+	<h4>Box Types</h4>
+	<p>A box's type is determined by its element: for example, divs and paragraphs generate <code>block</code> boxes while spans and emphasis generate <code>inline</code> boxes.  Other box types include <code>inline&#8209;block</code>, <code>list&#8209;item</code>, <code>table</code>, <code>table&#8209;row</code>, and <code>table&#8209;cell</code>.  The box type can be overridden using the <code>display</code> property.</p>
+	<h4>Positioning Schemes</h4>
+	<p>There are three positioning schemes: normal flow, absolute, and floating.  All boxes participate in the normal flow by default.  This can be changed by setting the position or float properties:</p>
+	<ul>
+		<li>Elements with <code>position:&nbsp;static</code> or <code>position&nbsp;relative</code> use the normal flow.</li>
+		<li>Elements with <code>position:&nbsp;absolute</code> or <code>position:&nbsp;fixed</code> use absolute positioning.<a id="origin-absolute-positioning" class="note-link" href="#note-absolute-positioning">*</a>  They are removed from the normal flow and do not affect the layout of other elements.</li>
+		<li>Elements with <code>float:&nbsp;left</code> or <code>float:&nbsp;right</code> are first laid out using the normal flow.  Then they are removed from the flow and shifted as far to the left or right as possible.  In their new position, they do not affect the layout of subsequent block elements, but they do reduce the available width for adjacent inline content.</li>
+	</ul>
+	<figure class="todo">Include an image showing how floating content interacts with block & inline boxes.</figure>
+	<h3>Calculating Dimensions</h3>
+	<p>After determining a box's position, the final step is to calculate its dimensions, so the rendering engine knows how much space to set aside for it in the page.  Each combination of box type and positioning scheme has complex rules governing how its dimensions are calculated.  We will superficially describe some of the common cases as examples.</p>
+	<h4>Inline Boxes in Normal Flow</h4>
+	<ul>
+		<li>The width and height properties are ignored for inline boxes.  The content area dimensions are determined only by the content (usually text) of the element.</li>
+		<li>Vertical padding, borders, and margins are applied, but they do not affect the layout of the box.  Only the <code>line&#8209;height</code> and <code>vertical&#8209;align</code> properties affect the vertical alignment of inline boxes.</li>
+		<li>Horizontal padding, borders, and margins work as expected.</li>
+	</ul>
+	<p class="todo">Discuss how line boxes lay out content within an inline box.</p>
+	<figure class="todo">Include an image or an interactive example.</figure>
+	<h4>Block Boxes in Normal Flow</h4>
+	<p>A block box always uses up all available width.  More precisely, the margin area width of a box must equal the content area width of its parent element's box.  This is accomplished as follows:</p>
+	<ol>
+		<li>If the <code>width</code> property is not set, the content area is sized to meet this requirement.</li>
+		<li>If <code>width</code> is set, but <code>margin&#8209;left</code> or <code>margin&#8209;right</code> are <code>auto</code>, the horizontal margins will set as needed.  This can be used to horizontally center a box.</li>
+		<li>If all of the above are set, the box is over-constrained (the padding and border areas are not flexible).  In this case, the right margin is overridden and resized.</li>
+	</ol>
+	<p>Vertical margins also get special treatement: they collapse with the vertical margins of adjacent boxes (that is, they overlap).  Vertical margins are considered adjacent if there is no padding or border separating them.  The margins of two sibling elements may be adjacent; so can the top margins of a parent element and its first child.</p>
+	<p>Borders, padding, and height work as expected.</p>
+	<figure class="interactive">
+		<div class="buttons">
+			<button class="both">Side-by-side</button>
+			<button class="code">Code</button>
+			<button class="preview">Preview</button>
+		</div>
+		<textarea class="code" title="Block Box Width">
+<!doctype html>
+<html>
+	<head>
+		<style type="text/css">
+			div { background: #c0d0ff; padding: 5px; border: 1px solid #607888; }
+			#both-auto { width: 50%; margin: 5px auto; }
+			#left-auto { width: 50%; margin: 5px 0 5px auto; }
+			#overconstrained { width: 50%; margin: 5px 0; }
+		</style>
+	</head>
+	<body>
+		<div id="full-width">This is a block with no styles set.  Its horizontal margins are set to zero and its width expands.</div>
+		<div id="both-auto">This is a block with fixed width and horizontal margins set to auto.  It is centered.</div>
+		<div id="left-auto">This is a block with only its left margin set to auto.  It is right-aligned.</div>
+		<div id="overconstrained">This is an overconstrained box.  Its right margin is overridden and it becomes left aligned.</div>
+	</body>
+</html>
+		</textarea>
+		<textarea class="code" title="Block Box Margins">
+<!doctype html>
+<html>
+	<head>
+		<style type="text/css">
+			div { background: #c0d0ff; padding: 5px; border: 1px solid #607888; }
+		</style>
+	</head>
+	<body>
+		<div>This is a demo of block box margins.</div>
+	</body>
+</html>
+		</textarea>
+	</figure>
+	<h4>Boxes with Absolute Positions</h4>
+	<p>These boxes must also use up all available width, but the calculation becomes more complicated.  The containing box is no longer the parent's box.  For elements with <code>position:&nbsp;absolute</code> it is the box of the first parent element that is not statically positioned.<a id="origin-specifying-container-boxes" class="note-link" href="#note-specifying-container-boxes">*</a>  For elements with <code>position:&nbsp;fixed</code>, the containing box is the screen (non-screen media have alternate definitions).</p>
+	<p>Furthermore, the <code>left</code> and <code>right</code> offset properties are summed with the margin area width when determining the size of the box.  The width constraint is met as follows:</p>
+	<ol>
+		<li>If either the <code>left</code> or <code>right</code> offsets are not set, they are sized to meet this requirement.</li>
+		<li>If <code>left</code> and <code>right</code> are set but <code>width</code> is not, the content area is set as needed.</li>
+		<li>If all three are set but <code>margin&#8209;left</code> or <code>margin&#8209;right</code> are <code>auto</code>, the margins are set as needed.</li>
+		<li>If all of the above are set, the box is over-constrained and the right offset is overridden and resized as needed.</li>
+	</ol>
+	<figure class="todo">Include an image or an interactive example.</figure>
+	<h2>Styling Elements</h2>
+	<p class="todo">Overview of how rules are parsed and applied to elements, history and evolution of CSS.</p>
+	<h3>Selectors</h3>
+	<p>A selector is sequence of simple selectors & combinators.  User agents implement a function matches&nbsp;:=&nbsp;selector&nbsp;X&nbsp;element&nbsp;&rarr;&nbsp;boolean.</p>
+	<ul>
+		<li>Basic selectors (type, id, class, universal)</li>
+		<li>Attribute selectors ([], [=], [~=], [^=], [$=], [*=], [|=])</li>
+		<li>
+			Pseudo-classes
+			<ul>
+				<li>Structural (root, first&#8209;child, nth&#8209;child(), only&#8209;child, empty...)</li>
+				<li>User action (hover, active, focus)</li>
+				<li>UI State (enabled, disabled, checked)</li>
+				<li>Others (target, lang(), not(), link, visited)</li>
+			</ul>
+		</li>
+		<li>Pseudo-elements (first&#8209;line, first&#8209;letter, before, after)</li>
+		<li>Combinators (descendant, child, adjacent sibling, general sibling)</li>
+		<li>Selector specificity</li>
+		<li>Media queries</li>
+	</ul>
+	<h3>Rules</h3>
+	<p class="todo">Discussion of useful rules and tricks.  Browser compatibility issues.  Units of measurement.  Group by category?  eg. typography, gradients, transforms...  Patterns for responsive design?</p>
+	<h2>Best Practices</h2>
+	<p>...</p>
+	<h3>Class and ID Names</h3>
+	<p>...</p>
+	<h3>Scoping Rules</h3>
+	<p>...</p>
+	<section class="notes">
+		<h3>Notes</h3>
+		<p id="note-list-inside-paragraph"><a class="return-link" href="#origin-list-inside-paragraph">&uarr;</a>If you try to put a list inside a paragraph, you can see an example of how browsers correct malformed documents: it will close the paragraph element before the list; the list follows as a sibling of the paragraph rather than its child; and finally it appends a new paragraph to hold whatever content remained after the list in the original paragraph element.</p>
+		<p id="note-box-sizing-uses" class="note"><a class="return-link" href="#origin-box-sizing-uses">&uarr;</a>Setting <code>box&#8209;sizing:&nbsp;border&#8209;box</code> makes the <code>width</code> and <code>height</code> properties target the entire visible area of a box.  This is useful for consistently sizing form elements (to which browsers apply varying amounts of padding and border) and sizing page layout elements to create a visual grid that precisely fills a fixed-width container.</p>
+		<p id="note-absolute-positioning" class="note"><a class="return-link" href="#origin-absolute-positioning">&uarr;</a>There is a difference between "absolute" as a value for the position property, and "absolute" as in the absolute positioning scheme.  The absolute positioning scheme also includes <code>position:&nbspfixed</code> elements.  It seems a poor choice of name, but this is how it is defined by the standard.</p>
+		<p id="note-specifying-container-boxes" class="note"><a class="return-link" href="#origin-specifying-container-boxes">&uarr;</a>It is common to set <code>position:&nbsp;relative</code> on an element to designate its box as the containing box for some absolute positioned descendant.  If no offset properties are specified on this parent element, the page layout will be unaffected.</p>
+	</section>
+</article>

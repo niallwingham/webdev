@@ -1,0 +1,85 @@
+﻿<article>
+	<h1>Introduction</h1>
+	<p>We begin this series of articles with an overview of the opportunities and challenges inherent to web development.  The following articles are primarily technical; this introduction offers some motivation and context with which to appreciate them.</p>
+	<h2>Why Web Development?</h2>
+	<p>Three characteristics uniquely identify the web as an ideal platform for application development.</p>
+	<h3>A Universal Platform</h3>
+	<p>The web is the closest thing we currently have to the mythical Universal Runtime.  Many platforms have promised something close to this in the past (notably Java and .NET) but none have found a truly universal reach.  However, every modern device designed to consume content has a web browser.</p>
+	<p>The web as a platform is not even limited to web browsers.  The languages used to build web applications—HTML, CSS, and JavaScript—can also be used to build native applications for iOS, Android, Windows 8, and other operating systems.</p>
+	<p>Web applications themselves are not perfectly portable.  There are additional things to take into account when building native applications: device-specific APIs; execution lifecycles (e.g. pause and resume events); and user interface paradigms.  Still, the ability to use the same languages across so many devices is powerful.</p>
+	<h3>An Open Platform</h3>
+	<p>The web is an open platform in two ways.  First, the web is open in that is has many stakeholders.  There is potential to for the platform to stagnate or fragment when these stakeholders disagree on the direction it should take.  But having such a variety of input and severe critical oversight has strengthened the web and made it versatile.</p>
+	<p>Second, the web is open in that every web application is open source.  This is true by necessity: an application’s source code must delivered to the client on each use.  Simple transformations such as bundling and minification may be applied, but there is no compilation, so at worst the source is obfuscated.</p>
+	<p>The result of this openness is that the ecosystem of development tools and frameworks for the web is more vibrant than those for any other platform, and they evolve much faster.  As web development advanced from static web sites to real-time and interactive applications, the ecosystem supported it and pushed it further.  However web development evolves next, the ecosystem will be ready.</p>
+	<h3>A Platform with Momentum</h3>
+	<p>Over the past several years, web standards have been advancing rapidly.  More importantly, browser support for these standards has finally accelerated and become widespread.  Web applications can now take advantage of features such as:</p>
+	<ul>
+		<li>Multi-threaded web workers for heavy background computation</li>
+		<li>Web sockets for streaming data to and from servers</li>
+		<li>Offline storage in the browser, local databases, and file systems</li>
+		<li>Hardware accelerated 3D graphics and animations</li>
+	</ul>
+	<p>There is also a certain buzz around the term “HTML5”.  In common usage, it offers little more semantic value than its cousin catchphrases, “Web 2.0” and “The Cloud”.  But it does represent a genuine desire among companies to take advantage of the nascent potential of web applications.</p>
+	<section class="summary">
+		<h3>Summary</h3>
+		<ul>
+			<li>
+				Universal
+				<ul>
+					<li>Every modern content-consuming device has a web browser</li>
+					<li>The same languages can be used to develop native applications</li>
+				</ul>
+			</li>
+			<li>
+				Open
+				<ul>
+					<li>The variety of stakeholders created a robust and versatile platform</li>
+					<li>Transparent code nurtures an ecosystem of tools and frameworks</li>
+				</ul>
+			</li>
+			<li>
+				Momentum
+				<ul>
+					<li>Standards and support are advancing rapidly</li>
+					<li>There's a buzz around “HTML5” applications</li>
+				</ul>
+			</li>
+		</ul>
+	</section>
+	<h2>High Level Concerns</h2>
+	<h3>Performance</h3>
+	<ul>
+		<li>Network (latency & bandwidth)</li>
+		<li>Graphics (animations & interactivity)</li>
+	</ul>
+	<h3>Accessibility</h3>
+	<ul>
+		<li>Screens (resolution, orientation, snapping, pixel density)</li>
+		<li>Input methods (mouse, touch, pen)</li>
+		<li>Non-browser user agents (screen readers, crawlers)</li>
+	</ul>
+	<h3>Consistency</h3>
+	<ul>
+		<li>Varying degrees of standards support</li>
+		<li>Graceful degradation vs. absolute consistency</li>
+	</ul>
+	<h2>Standards Landscape</h2>
+	<h3>W3C (World Wide Web Consortium)</h3>
+	<ul>
+		<li>Traditional web standards (HTML4, CSS2.1, <span class="todo">DOMv?</span>)</li>
+		<li>Web-related standards: SVG, fonts, etc.</li>
+		<li>Versioned and modular standards: HTML5, CSS3</li>
+	</ul>
+	<h3>WHATWG (Web Hypertext Application Technology Working Group)</h3>
+	<ul>
+		<li>2004 offshoot of W3C by Apple, Mozilla, and Opera; led by Ian Hickson</li>
+		<li>HTML Living Standard</li>
+	</ul>
+	<h3>ECMA (European Computer Manufacturers Association)</h3>
+	<ul>
+		<li>History: JavaScript & Netscape</li>
+		<li>Browser implementations of ECMAScript: JavaScript, JScript, v8...</li>
+		<li>Non-browser implementations: Node, Rhino, etc.</li>
+		<li>Future: ECMAScript Harmony</li>
+	</ul>
+</article>

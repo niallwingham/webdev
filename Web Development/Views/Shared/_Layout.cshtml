@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>@(ViewBag.Title != null ? ViewBag.Title + " - " : "")Web Development Articles</title>
+		<link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+		<meta name="viewport" content="width=device-width" />
+		@Bundles.RenderStylesheets()
+		@Bundles.RenderScripts("head")
+	</head>
+	<body>
+		<header>
+			<h1>@Html.ActionLink("Web Development Articles", "Index")</h1>
+			<nav>
+				<ul>
+					@* Use non-breaking spaces (\u00A0) in navigation links for cleaner line-wrapping *@
+					<li>@Html.ActionLink("Introduction", "Introduction")</li>
+					<li>@Html.ActionLink("Content\u00A0&\u00A0Presentation", "ContentAndPresentation")</li>
+					<li>@Html.ActionLink("JavaScript\u00A0&\u00A0The DOM", "Javascript")</li>
+					<li>@Html.ActionLink("Tools\u00A0&\u00A0Frameworks", "ToolsAndFrameworks")</li>
+				</ul>
+			</nav>
+		</header>
+		@RenderBody()
+		<footer>Brought to you by the letter W and the number 3</footer>
+		@Bundles.RenderScripts()
+	</body>
+</html>

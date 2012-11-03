@@ -1,0 +1,50 @@
+﻿// @reference global.less
+@import "constants.less";
+
+@border-color: #CCC;
+
+figure.interactive {
+	border: 1px solid @border-color;
+	> div:first-child {
+		border-bottom: 1px solid @border-color;
+	}
+	textarea.code {
+		display: none;
+	}
+	.CodeMirror, iframe {
+		box-sizing: border-box;
+		width: 50%;
+		float: left;
+		-webkit-transition: all 1s;
+	}
+	.CodeMirror-gutter {
+		background: darken(@background-color, 1%);
+		border-color: @border-color;
+	}
+	.CodeMirror-scroll {
+		height: 300px;
+	}
+	iframe {
+		border: none;
+		border-left: 1px solid @border-color;
+		height: 300px;
+	}
+	&.code {
+		.CodeMirror {
+			width: 100%;
+		}
+		iframe {
+			width: 0;
+			border-width: 0;
+		}
+	}
+	&.preview {
+		.CodeMirror {
+			width: 0;
+		}
+		iframe {
+			width: 100%;
+			border-width: 0;
+		}
+	}
+}
